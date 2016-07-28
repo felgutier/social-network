@@ -31,7 +31,7 @@ gem 'haml-rails'
 gem 'devise'
 gem 'omniauth-facebook'
 gem 'omniauth-twitter'
-
+gem 'dotenv-rails'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
