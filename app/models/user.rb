@@ -1,8 +1,12 @@
 class User < ApplicationRecord
+  TEMP_EMAIL_PREFIX = 'change@me'
+  TEMP_EMAIL_REGEX = /\Achange@me/
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :omniauthable, omniauth_providers: [:facebook, :twitter]
+
+  validates_format_of :email, :without => TEMP_EMAIL_REGEX, on: :update
 
   has_many :identities, dependent: :destroy
 
@@ -34,14 +38,15 @@ class User < ApplicationRecord
             user = User.new(
               name: auth.info.name,
               email: email ? email : "update@me.com",
-              remote_avatar_url: auth.info.image,
+              # remote_avatar_url: auth.info.image,
               password: Devise.friendly_token[0,20]
             )
           else
+            # auth.info.email = nil
             user = User.new(
               name: auth.info.name,
-              email: email ? email : "update@me.com",
-              remote_avatar_url: auth.info.image,
+              email: auth.info.email ? auth.info.email : "update@me.com",
+              # remote_avatar_url: auth.info.image,
               password: Devise.friendly_token[0,20]
             )
           end
@@ -55,6 +60,10 @@ class User < ApplicationRecord
       identity.save!
     end
     user
+  end
+
+  def email_verified?
+    self.email && self.email !~ TEMP_EMAIL_REGEX
   end
 
 end

@@ -1,2 +1,4 @@
 %h1 Bienvenido a la página
 %p probando HAML
+-if user_signed_in?
+	=link_to "cerrar sesión", destroy_user_session_path, method: :delete

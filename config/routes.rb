@@ -3,6 +3,11 @@ Rails.application.routes.draw do
   	omniauth_callbacks: "users/omniauth_callbacks"
   }
 
+  # post "/custom_sign_up", to: "users/omniauth_callbacks#custom_sign_up"
+
+  devise_scope :user do post "/custom_sign_up" => "users/omniauth_callbacks#custom_sign_up"
+  end
+
   root 'main#home'
 
    # 1 Mandar información a facebook
